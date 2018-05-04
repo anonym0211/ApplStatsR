@@ -1,0 +1,63 @@
+X <- matrix(rnorm(2500 * 12,
+             0,
+             sqrt(3)),
+       ncol = 12)
+
+Y <- matrix(nrow = 2500, ncol = 12)
+for(j in 1:ncol(X)) {
+  for(i in 1:nrow(X)){
+    Y[i,j] <- (X[i,j]-mean(X[,j]))/sd(X[,j])
+  }
+}
+
+X_t <- X
+for(i in 1:nrow(X)){
+  if(!(sum(X[i,] > 0) >= 6)){
+    X_t <- X_t[-i,]
+  }
+}
+X <- X_t
+
+set.seed(42)
+mat <- matrix(data = rexp(16, rate = 5),ncol = 4, nrow = 4)
+cond <- c()
+for (i in 1:nrow(mat)) {
+  cond <- c(cond,((mat[i,3] >= mat[i,1]) & (mat[i,3] <= mat[i,2])) | ((mat[i,3] <= mat[i,1]) & (mat[i,3] >= mat[i,2])))
+}
+
+((mat[,3] >= mat[,1]) & (mat[,3] <= mat[,2])) | ((mat[,3] <= mat[,1]) & (mat[,3] >= mat[,2]))
+
+for (i in 1:nrow(X)) {
+  X[i, which(X[i,] == max(X[i,]))] <- min(X[i,])
+}
+
+X <- matrix(rnorm(2500 * 12,
+             0,
+             sqrt(3)),
+       ncol = 12)
+for (j in 1:ncol(X)) {
+  for(i in 1:(2500-1)){
+    if(X[i,1] > 0){
+      X[i+1,j] <-  runif(1,-1,1) + X[i+1,j]
+    } else {
+      X[i+1,j] <-  runif(1,-2,2) + X[i+1,j]
+    }
+  }
+}
+
+set.seed(2015)
+w <- runif(10)
+x <- runif(10)
+y <- runif(10)
+z <- runif(10)
+dat <- data.frame(a = w, b = x, c = y, d = z)
+
+inbetween <- function(x, lower, upper){
+  x >= lower & x <= upper
+}
+
+dat$inbetween <- inbetween(dat$a, dat$c, dat$d) |
+  inbetween(dat$b, dat$c, dat$d) |
+  inbetween(dat$c, dat$a, dat$b) |
+  inbetween(dat$d, dat$a, dat$b)
+dat
